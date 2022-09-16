@@ -21,7 +21,7 @@ public class ConfirmationToken {
     )
     @Id
     @GeneratedValue(
-            strategy = GenerationType.AUTO,
+            strategy = GenerationType.SEQUENCE,
             generator = "confirmation_token_sequence"
     )
     private Long id;

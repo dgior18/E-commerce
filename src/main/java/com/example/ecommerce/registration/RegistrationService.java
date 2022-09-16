@@ -3,7 +3,6 @@ package com.example.ecommerce.registration;
 import com.example.ecommerce.appuser.AppUser;
 import com.example.ecommerce.appuser.AppUserRole;
 import com.example.ecommerce.appuser.AppUserService;
-import com.example.ecommerce.email.EmailSender;
 import com.example.ecommerce.email.EmailService;
 import com.example.ecommerce.registration.token.ConfirmationToken;
 import com.example.ecommerce.registration.token.ConfirmationTokenService;
