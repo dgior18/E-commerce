@@ -1,4 +1,4 @@
-package com.example.ecommerce.payment;
+package com.example.ecommerce.products;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,10 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class PaymentRequest {
-    private final Long cardNumber;
-    private final int dateExpires;
-    private final int personalCode;
+public class ProductRequest {
     private final String productName;
     private final Long quantity;
+    private final Long price;
 }
