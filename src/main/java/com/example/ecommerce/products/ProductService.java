@@ -1,5 +1,6 @@
 package com.example.ecommerce.products;
 
+import com.example.ecommerce.appuser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ public class ProductService {
             "product with name %s not found";
 
     private final ProductRepository productRepository;
+    private final AppUserService appUserService;
 
     public Product loadProductByName(String productName)
             throws UsernameNotFoundException {
@@ -22,7 +24,7 @@ public class ProductService {
                                 String.format(PRODUCT_NOT_FOUND_MSG, productName)));
     }
 
-    public String addProduct(Product product) {
+    public String addProduct(Product product, String userEmail) {
 
         boolean productExist = productRepository
                 .findProductByProductName(product.getProductName())
@@ -30,6 +32,10 @@ public class ProductService {
 
         if (productExist) {
             throw new IllegalStateException("product already added");
+        }
+
+        if (!appUserService.loadUserByUsername(userEmail).isEnabled()){
+            throw new IllegalStateException("Can't add product. You should verify your account.");
         }
 
         productRepository.save(product);

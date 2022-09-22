@@ -13,4 +13,5 @@ public class ProductRequest {
     private final String productName;
     private final Long quantity;
     private final Long price;
+    private final String userEmail;
 }

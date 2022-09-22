@@ -18,7 +18,7 @@ public class ProductController {
         return productService.addProduct(
                 new Product(request.getProductName(),
                         request.getQuantity(),
-                        request.getPrice()));
+                        request.getPrice()), request.getUserEmail());
     }
 
 }
