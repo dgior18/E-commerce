@@ -38,15 +38,16 @@ public class RegistrationService {
                         request.getFirstName(),
                         request.getLastName(),
                         request.getEmail(),
+                        request.getIdNumber(),
                         request.getPassword(),
                         AppUserRole.USER
 
                 )
         );
 
-        log.info("created token " + token);
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        log.info("created link " + link);
+        log.info("created token " + token);
+
         try {
             emailService.send(
                     request.getEmail(),
