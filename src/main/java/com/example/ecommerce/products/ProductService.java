@@ -22,7 +22,7 @@ public class ProductService {
                                 String.format(PRODUCT_NOT_FOUND_MSG, productName)));
     }
 
-    public void addProduct(Product product) {
+    public String addProduct(Product product) {
 
         boolean productExist = productRepository
                 .findProductByProductName(product.getProductName())
@@ -33,9 +33,11 @@ public class ProductService {
         }
 
         productRepository.save(product);
+
+        return "Product added";
     }
 
-    public void buyProduct(String productName, int quantity) {
+    public void buyProduct(String productName, Long quantity) {
 
 
         Product product = productRepository
@@ -48,10 +50,9 @@ public class ProductService {
             throw new IllegalStateException("Not enough in store");
         }
 
-//        TODO: payment service
-
         product.setQuantity(currQuantity - quantity);
 
+        productRepository.updateProduct(product.getQuantity(), productName);
     }
 
 }

@@ -12,6 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Product {
 
+    @SequenceGenerator(
+            name = "product_sequence",
+            sequenceName = "product_sequence",
+            allocationSize = 1
+    )
+
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -22,4 +28,12 @@ public class Product {
     private String productName;
     private Long quantity;
     private Long price;
+
+    public Product(String productName,
+                   Long quantity,
+                   Long price){
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
+    }
 }
