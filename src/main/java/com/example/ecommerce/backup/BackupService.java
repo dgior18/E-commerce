@@ -1,87 +1,48 @@
-package com.example.ecommerce.registration;
+package com.example.ecommerce.backup;
 
 import com.example.ecommerce.appuser.AppUser;
-import com.example.ecommerce.appuser.AppUserRole;
-import com.example.ecommerce.appuser.AppUserService;
+import com.example.ecommerce.appuser.AppUserRepository;
 import com.example.ecommerce.email.EmailService;
-import com.example.ecommerce.registration.token.ConfirmationToken;
-import com.example.ecommerce.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
-@Slf4j
-public class RegistrationService {
+public class BackupService {
 
-    private final AppUserService appUserService;
-    private final EmailValidator emailValidator;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final AppUserRepository appUserRepository;
+
     private final EmailService emailService;
 
-    public String register(RegistrationRequest request){
-        log.info("trying to register user with " + request.getEmail());
-        boolean isValidEmail = emailValidator.
-                test(request.getEmail());
+    public String backup(Long idNumber){
 
-        if (!isValidEmail) {
-            throw new IllegalStateException("email not valid");
-        }
-        log.info("checking email vaildation" + request.getEmail());
-        String token = appUserService.signUpUser(
-                new AppUser(
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getEmail(),
-                        request.getIdNumber(),
-                        request.getPassword(),
-                        AppUserRole.USER
+        var user = appUserRepository.findByIdNumber(idNumber)
+                .orElseThrow(() ->
+                        new IllegalStateException("Invalid ID number"));
 
-                )
-        );
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        log.info("created token " + token);
-
-        String subject = "Confirm your email";
+        String link = "http://localhost:8080/backup/reset";
+        String subject = "Reset your password";
 
         try {
             emailService.send(
-                    request.getEmail(),
-                    buildEmail(request.getFirstName(), link), subject);
+                    user.getEmail(),
+                    buildEmail(user.getFirstName(), link), subject);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
 
-        return token;
+        return "Link was sent";
     }
 
-    @Transactional
-    public String confirmToken(String token) {
-        ConfirmationToken confirmationToken = confirmationTokenService
-                .getToken(token)
+    public String reset(Long idNumber, String newPass){
+        AppUser user = appUserRepository.findByIdNumber(idNumber)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
-
-        if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
-        }
-
-        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
-
-        if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
-        }
-
-        confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(
-                confirmationToken.getAppUser().getEmail());
-        return "confirmed";
+                        new IllegalStateException("Invalid ID number"));
+        user.setPassword(newPass);
+        return "Password changed successfully";
     }
 
     private String buildEmail(String name, String link) {
@@ -140,7 +101,7 @@ public class RegistrationService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Please click on the below link to reset your password: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Reset password</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

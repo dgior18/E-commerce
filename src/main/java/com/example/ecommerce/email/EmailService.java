@@ -18,7 +18,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 public class EmailService{
 
 
-    public void send(String recipient, String text) throws MessagingException {
+    public void send(String recipient, String text, String subject) throws MessagingException {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -32,18 +32,18 @@ public class EmailService{
                 return new PasswordAuthentication(myAccountEmail, password);
             }
         });
-        Message message = prepareMessage(session, myAccountEmail, recipient, text);
+        Message message = prepareMessage(session, myAccountEmail, recipient, text, subject);
         Transport.send(message);
     }
 
-    private static Message prepareMessage(Session session, String myAccountMail, String recipient, String text) {
+    private static Message prepareMessage(Session session, String myAccountMail, String recipient, String text, String subject) {
         try {
             MimeMessage message = new MimeMessage(session);
             MimeMessageHelper helper =
                     new MimeMessageHelper(message, "utf-8");
             helper.setText(text, true);
             helper.setTo(recipient);
-            helper.setSubject("Confirm your email");
+            helper.setSubject(subject);
             helper.setFrom(myAccountMail);
             return message;
         } catch (MessagingException e) {
