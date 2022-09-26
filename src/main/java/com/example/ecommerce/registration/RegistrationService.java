@@ -24,6 +24,9 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailService emailService;
 
+
+    public static int authorizedUsersCount = 0;
+
     public String register(RegistrationRequest request){
         log.info("trying to register user with " + request.getEmail());
         boolean isValidEmail = emailValidator.
@@ -81,6 +84,9 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail());
+
+        authorizedUsersCount++;
+
         return "confirmed";
     }
 

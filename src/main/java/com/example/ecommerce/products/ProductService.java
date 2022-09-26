@@ -21,6 +21,11 @@ public class ProductService {
     private final AppUserService appUserService;
     private final AppUserRepository appUserRepository;
 
+    public static int broughtProductsCount = 0;
+    public static int broughtProductsSum = 0;
+    public static int incomeFromTax = 0;
+    public static int addedProductsCount = 0;
+
     public Product loadProductByName(String productName)
             throws UsernameNotFoundException {
         return productRepository.findProductByProductName(productName)
@@ -49,6 +54,8 @@ public class ProductService {
 
         productRepository.save(product);
 
+        addedProductsCount++;
+
         return "Product added";
     }
 
@@ -71,9 +78,15 @@ public class ProductService {
 
         AppUser user = product.getUser();
 
-        double newCashAmount = user.getCashAmount() + quantity * product.getPrice() * 0.9;
+        var moneyToPay = product.getPrice() * quantity;
+
+        double newCashAmount = user.getCashAmount() + moneyToPay * 0.9;
         user.setCashAmount(newCashAmount);
         appUserRepository.updateCash(newCashAmount, user.getEmail());
+
+        broughtProductsCount++;
+        broughtProductsSum += moneyToPay;
+        incomeFromTax += moneyToPay * 0.1;
     }
 
     public Product verifyProduct(String productName, String userEmail) {
