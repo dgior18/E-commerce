@@ -13,7 +13,11 @@ public class HomeService {
 
     private final ProductRepository productRepository;
 
+
+    public static int visitsForToday = 0;
+
     public List<Product> getProducts(){
+        visitsForToday++;
         return productRepository.findAll();
     }
 
