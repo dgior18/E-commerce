@@ -1,5 +1,6 @@
 package com.example.ecommerce.appuser;
 
+import com.example.ecommerce.products.Product;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,19 +42,25 @@ public class AppUser implements UserDetails {
     private AppUserRole appUserRole;
     private Boolean locked = false;
     private Boolean enabled = false;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Product> usersProducts;
+    private double cashAmount;
 
     public AppUser(String firstName,
                    String lastName,
                    String email,
                    Long idNumber,
                    String password,
-                   AppUserRole appUserRole) {
+                   AppUserRole appUserRole,
+                   double cashAmount) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.idNumber = idNumber;
         this.appUserRole = appUserRole;
+        this.cashAmount = cashAmount;
     }
 
     @Override

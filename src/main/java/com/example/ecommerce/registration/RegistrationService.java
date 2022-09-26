@@ -40,8 +40,8 @@ public class RegistrationService {
                         request.getEmail(),
                         request.getIdNumber(),
                         request.getPassword(),
-                        AppUserRole.USER
-
+                        AppUserRole.USER,
+                        0
                 )
         );
 

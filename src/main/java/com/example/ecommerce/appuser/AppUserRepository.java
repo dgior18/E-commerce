@@ -24,4 +24,10 @@ public interface AppUserRepository
             "SET a.enabled = TRUE WHERE a.email = ?1")
     int enableAppUser(String email);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE AppUser a " +
+            "SET a.cashAmount = ?1 WHERE a.email = ?2")
+    int updateCash(double cashAmount, String email);
+
 }

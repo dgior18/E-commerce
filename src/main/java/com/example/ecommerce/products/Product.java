@@ -1,5 +1,6 @@
 package com.example.ecommerce.products;
 
+import com.example.ecommerce.appuser.AppUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,9 @@ public class Product {
     private String productName;
     private Long quantity;
     private Long price;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser user;
 
     public Product(String productName,
                    Long quantity,

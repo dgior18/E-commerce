@@ -1,5 +1,7 @@
 package com.example.ecommerce.products;
 
+import com.example.ecommerce.appuser.AppUser;
+import com.example.ecommerce.appuser.AppUserRepository;
 import com.example.ecommerce.appuser.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +17,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final AppUserService appUserService;
+    private final AppUserRepository appUserRepository;
 
     public Product loadProductByName(String productName)
             throws UsernameNotFoundException {
@@ -34,9 +37,13 @@ public class ProductService {
             throw new IllegalStateException("product already added");
         }
 
-        if (!appUserService.loadUserByUsername(userEmail).isEnabled()){
+
+        if (!appUserService.loadUserByUsername(userEmail).isEnabled()) {
             throw new IllegalStateException("Can't add product. You should verify your account.");
         }
+
+        AppUser user = appUserRepository.findByEmail(userEmail).get();
+        product.setUser(user);
 
         productRepository.save(product);
 
@@ -59,6 +66,12 @@ public class ProductService {
         product.setQuantity(currQuantity - quantity);
 
         productRepository.updateProduct(product.getQuantity(), productName);
+
+        AppUser user = product.getUser();
+
+        double newCashAmount = user.getCashAmount() + quantity * product.getPrice() * 0.9;
+        user.setCashAmount(newCashAmount);
+        appUserRepository.updateCash(newCashAmount, user.getEmail());
     }
 
 }
