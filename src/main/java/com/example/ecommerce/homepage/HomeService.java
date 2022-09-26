@@ -17,6 +17,7 @@ public class HomeService {
     public static int visitsForToday = 0;
 
     public List<Product> getProducts(){
+        visitsForToday++;
         return productRepository.findAll();
     }
 
