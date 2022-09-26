@@ -21,7 +21,19 @@ public interface ProductRepository
     @Transactional
     @Modifying
     @Query("UPDATE Product  p " +
-            "SET p.quantity = :quantity WHERE p.productName = :productName")
-    int updateProduct(@Param(value = "quantity") Long quantity, @Param(value = "productName") String productName);
+            "SET p.quantity = :quantity WHERE p.id = :id")
+    int updateQuantity(@Param(value = "quantity") Long quantity, @Param(value = "id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Product  p " +
+            "SET p.price = :price WHERE p.id = :id")
+    int updatePrice(@Param(value = "price") Long price, @Param(value = "id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Product  p " +
+            "SET p.productName = :productName WHERE p.id = :id")
+    int updateProductName(@Param(value = "productName") String productName, @Param(value = "id") Long id);
 
 }

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @AllArgsConstructor
@@ -65,13 +67,48 @@ public class ProductService {
 
         product.setQuantity(currQuantity - quantity);
 
-        productRepository.updateProduct(product.getQuantity(), productName);
+        productRepository.updateQuantity(product.getQuantity(), product.getId());
 
         AppUser user = product.getUser();
 
         double newCashAmount = user.getCashAmount() + quantity * product.getPrice() * 0.9;
         user.setCashAmount(newCashAmount);
         appUserRepository.updateCash(newCashAmount, user.getEmail());
+    }
+
+    public Product verifyProduct(String productName, String userEmail) {
+
+        AppUser user = appUserRepository.findByEmail(userEmail).orElseThrow(() -> new IllegalStateException("user not found"));
+
+        Optional<Product> productList = user.getUsersProducts().stream()
+                .filter(product -> product.getProductName()
+                        .equals(productName)).findFirst();
+
+        if (productList.isEmpty()) {
+            throw new IllegalStateException("product not found");
+        }
+        return productList.get();
+    }
+
+    public String editProductName(String productName, String userEmail, String newProductName) {
+        var product = verifyProduct(productName, userEmail);
+        product.setProductName(newProductName);
+        productRepository.updateProductName(productName, product.getId());
+        return "Edited";
+    }
+
+    public String editProductPrice(String productName, String userEmail, Long price) {
+        var product = verifyProduct(productName, userEmail);
+        product.setPrice(price);
+        productRepository.updatePrice(price, product.getId());
+        return "Edited";
+    }
+
+    public String editProductQuantity(String productName, String userEmail, Long quantity) {
+        var product = verifyProduct(productName, userEmail);
+        product.setQuantity(quantity);
+        productRepository.updateQuantity(quantity, product.getId());
+        return "Edited";
     }
 
 }
