@@ -1,5 +1,6 @@
-package com.example.ecommerce.generator;
+package com.example.ecommerce.controllers;
 
+import com.example.ecommerce.generator.ExcelGenerator;
 import lombok.AllArgsConstructor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;

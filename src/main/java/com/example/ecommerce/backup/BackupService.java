@@ -41,7 +41,7 @@ public class BackupService {
 
         log.info("Sent link for backup to email: " + user.getEmail() + ".");
 
-        return "Link was sent";
+        return "Link is sent";
     }
 
     public String reset(Long idNumber, String newPass) {

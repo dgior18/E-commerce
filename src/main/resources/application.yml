@@ -17,4 +17,5 @@ spring:
         format_sql: true
     show-sql: true
 
-
+application.email: "dgior18@freeuni.edu.ge"
+application.password: "60001147346"

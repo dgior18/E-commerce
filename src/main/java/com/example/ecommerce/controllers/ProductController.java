@@ -1,5 +1,8 @@
-package com.example.ecommerce.products;
+package com.example.ecommerce.controllers;
 
+import com.example.ecommerce.products.Product;
+import com.example.ecommerce.products.ProductRequest;
+import com.example.ecommerce.products.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

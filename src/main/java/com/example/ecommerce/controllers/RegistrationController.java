@@ -1,5 +1,7 @@
-package com.example.ecommerce.registration;
+package com.example.ecommerce.controllers;
 
+import com.example.ecommerce.registration.RegistrationRequest;
+import com.example.ecommerce.registration.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

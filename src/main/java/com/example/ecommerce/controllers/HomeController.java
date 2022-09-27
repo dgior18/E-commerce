@@ -1,5 +1,6 @@
-package com.example.ecommerce.homepage;
+package com.example.ecommerce.controllers;
 
+import com.example.ecommerce.homepage.HomeService;
 import com.example.ecommerce.products.ProductResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

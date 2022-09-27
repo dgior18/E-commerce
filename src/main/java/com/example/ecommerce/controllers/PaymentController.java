@@ -1,5 +1,7 @@
-package com.example.ecommerce.payment;
+package com.example.ecommerce.controllers;
 
+import com.example.ecommerce.payment.PaymentRequest;
+import com.example.ecommerce.payment.PaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

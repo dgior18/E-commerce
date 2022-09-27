@@ -1,7 +1,7 @@
 package com.example.ecommerce.email;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -16,10 +16,14 @@ import javax.mail.Transport;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class EmailService {
 
+    @Value("${application.email}")
+    private String email;
+
+    @Value("${application.password}")
+    private String password;
 
     public void send(String recipient, String text, String subject) throws MessagingException {
         Properties properties = new Properties();
@@ -27,15 +31,13 @@ public class EmailService {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
-        final String myAccountEmail = "dgior18@freeuni.edu.ge";
-        final String password = "60001147346";
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myAccountEmail, password);
+                return new PasswordAuthentication(email, password);
             }
         });
-        Message message = prepareMessage(session, myAccountEmail, recipient, text, subject);
+        Message message = prepareMessage(session, email, recipient, text, subject);
 
         log.info("Set credentials to send and build email.");
 
