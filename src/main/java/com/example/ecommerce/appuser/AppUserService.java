@@ -27,6 +27,9 @@ public class AppUserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
+
+    public static int visitsForToday = 0;
+
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
@@ -53,7 +56,7 @@ public class AppUserService implements UserDetailsService {
 
         appUser.setPassword(encodedPassword);
 
-        var user =appUserRepository.save(appUser);
+        var user = appUserRepository.save(appUser);
         if (user == null) {
             throw new IllegalStateException("error");
         }
@@ -71,7 +74,8 @@ public class AppUserService implements UserDetailsService {
         confirmationTokenService.saveConfirmationToken(
                 confirmationToken);
 
-//        TODO: SEND EMAIL
+
+        visitsForToday++;
 
         return token;
     }

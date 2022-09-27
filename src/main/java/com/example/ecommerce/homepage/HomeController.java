@@ -1,6 +1,7 @@
 package com.example.ecommerce.homepage;
 
 import com.example.ecommerce.products.Product;
+import com.example.ecommerce.products.ProductResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ public class HomeController {
     private final HomeService homeService;
 
     @GetMapping
-    public List<Product> getProducts(){
+    public List<ProductResponse> getProducts(){
         return homeService.getProducts();
     }
 }

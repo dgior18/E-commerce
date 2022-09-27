@@ -27,7 +27,7 @@ public class RegistrationService {
 
     public static int authorizedUsersCount = 0;
 
-    public String register(RegistrationRequest request){
+    public String register(RegistrationRequest request) {
         log.info("trying to register user with " + request.getEmail());
         boolean isValidEmail = emailValidator.
                 test(request.getEmail());

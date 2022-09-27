@@ -1,6 +1,7 @@
 package com.example.ecommerce.appuser;
 
 import com.example.ecommerce.products.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,7 @@ public class AppUser implements UserDetails {
     private Boolean enabled = false;
     @OneToMany
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private List<Product> usersProducts;
     private double cashAmount;
 

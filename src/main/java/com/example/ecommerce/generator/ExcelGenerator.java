@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.ecommerce.appuser.AppUserService;
 import com.example.ecommerce.homepage.HomeService;
 import com.example.ecommerce.products.ProductService;
 import com.example.ecommerce.registration.RegistrationService;
@@ -24,7 +25,6 @@ public class ExcelGenerator {
     public ExcelGenerator(XSSFWorkbook workbook) {
         this.workbook = workbook;
     }
-
 
     private void writeHeader() {
         sheet = workbook.createSheet("Info");
@@ -70,7 +70,7 @@ public class ExcelGenerator {
         createCell(row, columnCount++, ProductService.incomeFromTax, style);
         createCell(row, columnCount++, ProductService.addedProductsCount, style);
         createCell(row, columnCount++, RegistrationService.authorizedUsersCount, style);
-        createCell(row, columnCount++, HomeService.visitsForToday, style);
+        createCell(row, columnCount++, AppUserService.visitsForToday, style);
 
     }
 

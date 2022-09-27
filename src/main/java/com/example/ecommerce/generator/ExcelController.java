@@ -1,7 +1,6 @@
 package com.example.ecommerce.generator;
 
 import lombok.AllArgsConstructor;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,7 @@ import java.util.Date;
 public class ExcelController {
 
     @GetMapping
-    public void exportToExcel(HttpServletResponse response) throws IOException{
+    public void exportToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String currentDateTime = dateFormatter.format(new Date());
