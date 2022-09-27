@@ -26,7 +26,7 @@ public class ProductController {
     }
 
     @PatchMapping("/edit/product/price")
-    public String editProductprice(@RequestParam("productName") String productName,
+    public String editProductPrice(@RequestParam("productName") String productName,
                                    @RequestParam("userEmail") String userEmail,
                                    @RequestParam("newPrice") Long newPrice) {
         return productService.editProductPrice(productName, userEmail, newPrice);

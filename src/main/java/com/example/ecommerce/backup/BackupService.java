@@ -4,24 +4,29 @@ import com.example.ecommerce.appuser.AppUser;
 import com.example.ecommerce.appuser.AppUserRepository;
 import com.example.ecommerce.email.EmailService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class BackupService {
 
     private final AppUserRepository appUserRepository;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailService emailService;
 
-    public String backup(Long idNumber){
+    public String backup(Long idNumber) {
 
         var user = appUserRepository.findByIdNumber(idNumber)
                 .orElseThrow(() ->
-                        new IllegalStateException("Invalid ID number"));
+                        new IllegalStateException("Invalid ID number."));
 
+
+        log.error("Couldn't find user with idNumber: " + idNumber + ".");
 
         String link = "http://localhost:8080/backup/reset";
         String subject = "Reset your password";
@@ -34,14 +39,29 @@ public class BackupService {
             e.printStackTrace();
         }
 
+        log.info("Sent link for backup to email: " + user.getEmail() + ".");
+
         return "Link was sent";
     }
 
-    public String reset(Long idNumber, String newPass){
+    public String reset(Long idNumber, String newPass) {
+
         AppUser user = appUserRepository.findByIdNumber(idNumber)
                 .orElseThrow(() ->
                         new IllegalStateException("Invalid ID number"));
+
+        log.error("Couldn't find user with idNumber: " + idNumber + ".");
+
+        String encodedPassword = bCryptPasswordEncoder
+                .encode(newPass);
+
         user.setPassword(newPass);
+
+        appUserRepository.updatePassword(encodedPassword, idNumber);
+
+
+        log.info("Password changed successfully for user with email: " + user.getEmail() + ".");
+
         return "Password changed successfully";
     }
 

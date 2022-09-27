@@ -1,7 +1,9 @@
 package com.example.ecommerce.email;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -15,7 +17,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
 @AllArgsConstructor
-public class EmailService{
+@Slf4j
+public class EmailService {
 
 
     public void send(String recipient, String text, String subject) throws MessagingException {
@@ -33,6 +36,9 @@ public class EmailService{
             }
         });
         Message message = prepareMessage(session, myAccountEmail, recipient, text, subject);
+
+        log.info("Set credentials to send and build email.");
+
         Transport.send(message);
     }
 

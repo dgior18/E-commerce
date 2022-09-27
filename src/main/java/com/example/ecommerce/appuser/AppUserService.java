@@ -40,15 +40,14 @@ public class AppUserService implements UserDetailsService {
     }
 
     public String signUpUser(AppUser appUser) {
+
         boolean userExists = appUserRepository
                 .findByEmail(appUser.getEmail())
                 .isPresent();
 
         if (userExists) {
-            // TODO check of attributes are the same and
-            // TODO if email not confirmed send confirmation email.
-
-            throw new IllegalStateException("email already taken");
+            log.error("User with email " + appUser.getEmail() + " already registered.");
+            throw new IllegalStateException("User with email " + appUser.getEmail() + " already registered.");
         }
 
         String encodedPassword = bCryptPasswordEncoder
@@ -56,10 +55,9 @@ public class AppUserService implements UserDetailsService {
 
         appUser.setPassword(encodedPassword);
 
-        var user = appUserRepository.save(appUser);
-        if (user == null) {
-            throw new IllegalStateException("error");
-        }
+        appUserRepository.save(appUser);
+
+        log.info("Saved user in DB with email " + appUser.getEmail() + ".");
 
         String token = UUID.randomUUID().toString();
 
@@ -74,13 +72,14 @@ public class AppUserService implements UserDetailsService {
         confirmationTokenService.saveConfirmationToken(
                 confirmationToken);
 
+        log.info("Saved confirmation token in DB: " + token + ".");
 
         visitsForToday++;
 
         return token;
     }
 
-    public int enableAppUser(String email) {
-        return appUserRepository.enableAppUser(email);
+    public void enableAppUser(String email) {
+        appUserRepository.enableAppUser(email);
     }
 }

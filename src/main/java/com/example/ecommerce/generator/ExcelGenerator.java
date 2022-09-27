@@ -5,7 +5,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.ecommerce.appuser.AppUserService;
-import com.example.ecommerce.homepage.HomeService;
 import com.example.ecommerce.products.ProductService;
 import com.example.ecommerce.registration.RegistrationService;
 import lombok.AllArgsConstructor;

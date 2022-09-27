@@ -22,12 +22,18 @@ public interface AppUserRepository
     @Modifying
     @Query("UPDATE AppUser a " +
             "SET a.enabled = TRUE WHERE a.email = ?1")
-    int enableAppUser(String email);
+    void enableAppUser(String email);
 
     @Transactional
     @Modifying
     @Query("UPDATE AppUser a " +
             "SET a.cashAmount = ?1 WHERE a.email = ?2")
-    int updateCash(double cashAmount, String email);
+    void updateCash(double cashAmount, String email);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE AppUser a " +
+            "SET a.password = ?1 WHERE a.idNumber = ?2")
+    void updatePassword(String password, Long idNumber);
 
 }

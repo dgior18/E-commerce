@@ -2,17 +2,20 @@ package com.example.ecommerce.payment;
 
 import com.example.ecommerce.products.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class PaymentService {
 
     private final ProductService productService;
 
     public String pay(PaymentRequest request) {
 
-        if (!checkValidation(request)){
+        if (!checkValidation(request)) {
+            log.error("Wrong credentials. Can't pay.");
             return "Wrong credentials. Can't pay.";
         }
 
@@ -24,15 +27,8 @@ public class PaymentService {
 
     private boolean checkValidation(PaymentRequest request) {
 
-        if (String.valueOf(request.getCardNumber()).length() != 16) {
-            return false;
-        }
-
-        if (String.valueOf(request.getPersonalCode()).length()!=3){
-            return false;
-        }
-
-        return true;
+        return String.valueOf(request.getPersonalCode()).length() == 3 &&
+                String.valueOf(request.getCardNumber()).length() == 16;
     }
 
 

@@ -28,14 +28,16 @@ public class RegistrationService {
     public static int authorizedUsersCount = 0;
 
     public String register(RegistrationRequest request) {
-        log.info("trying to register user with " + request.getEmail());
+        log.info("Trying to register user with " + request.getEmail());
         boolean isValidEmail = emailValidator.
                 test(request.getEmail());
 
         if (!isValidEmail) {
-            throw new IllegalStateException("email not valid");
+            throw new IllegalStateException("Email not valid.");
         }
-        log.info("checking email vaildation" + request.getEmail());
+
+        log.info("Checking email vaildation " + request.getEmail() + ".");
+
         String token = appUserService.signUpUser(
                 new AppUser(
                         request.getFirstName(),
@@ -49,7 +51,6 @@ public class RegistrationService {
         );
 
         String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
-        log.info("created token " + token);
 
         String subject = "Confirm your email";
 
@@ -61,6 +62,9 @@ public class RegistrationService {
             e.printStackTrace();
         }
 
+        log.info("User registered with email: " + request.getEmail() + ".");
+        log.info("Sent token " + token + " to user with email: " + request.getEmail() + ".");
+
         return token;
     }
 
@@ -69,21 +73,26 @@ public class RegistrationService {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+                        new IllegalStateException("Token not found."));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            log.error("Email already confirmed.");
+            throw new IllegalStateException("Email already confirmed.");
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            log.error("Token expired.");
+            throw new IllegalStateException("Token expired.");
         }
 
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail());
+
+
+        log.info("User successfully verified account.");
 
         authorizedUsersCount++;
 

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@RequestMapping(path = "/export/excel")
+@RequestMapping(path = "/api/v*/export/excel")
 @AllArgsConstructor
 public class ExcelController {
 
@@ -24,7 +24,7 @@ public class ExcelController {
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=student" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=info" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         ExcelGenerator generator = new ExcelGenerator(new XSSFWorkbook());
